@@ -77,7 +77,7 @@
         public static Item[] items = new Item[7];
         public static Player player = new Player(1, "Chad", "전사", 10, 5, 100, 10000);
 
-        static void Main()
+        static void InitializeItems()
         {
             items[0] = new Item("수련자 갑옷", 0, 5, "수련에 도움을 주는 갑옷입니다.", 1000);
             items[1] = new Item("무쇠 갑옷", 0, 9, "무쇠로 만들어져 튼튼한 갑옷입니다.", 1800);
@@ -85,8 +85,11 @@
             items[3] = new Item("낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다.", 600);
             items[4] = new Item("청동 도끼", 5, 0, "어디선가 사용됐던거 같은 도끼입니다.", 1500);
             items[5] = new Item("스파르타의 창", 7, 0, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 2700);
-            items[6] = new Item("스파르타 몽둥이", 100, 0, "TIL을 안 쓰면 볼 수 있다.", 10000);
+            items[6] = new Item("스파르타 몽둥이", 100, 0, "TIL을 안 쓰면 볼 수 있습니다.", 10000);
+        }
 
+        static void ShowVillage()
+        {
             bool isPlaying = true;
 
             while (isPlaying)
@@ -108,15 +111,15 @@
                 switch (input)
                 {
                     case "1":
-                        ShowStatusScene();
+                        ShowStatus();
                         break;
 
                     case "2":
-                        ShowInventoryScene();
+                        ShowInventory();
                         break;
 
                     case "3":
-                        ShowStoreScene();
+                        ShowStore();
                         break;
 
                     case "0":
@@ -124,15 +127,20 @@
                         break;
 
                     default:
-                        Console.WriteLine();
-                        Console.Write("잘못된 입력입니다.");
-                        Console.ReadLine();
+                        PrintInputError();
                         break;
                 }
             }
         }
 
-        static void ShowStatusScene()
+        static void PrintInputError()
+        {
+            Console.WriteLine();
+            Console.Write("잘못된 입력입니다.");
+            Console.ReadLine();
+        }
+
+        static void ShowStatus()
         {
             while (true)
             {
@@ -178,14 +186,12 @@
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.Write("잘못된 입력입니다.");
-                    Console.ReadLine();
+                    PrintInputError();
                 }
             }
         }
 
-        static void ShowInventoryScene()
+        static void ShowInventory()
         {
             while (true)
             {
@@ -196,17 +202,10 @@
                 Console.WriteLine("[아이템 목록]");
                 for (int i = 0; i < player.PurchasedItems.Count; i++)
                 {
-                    string equippedStatus = player.PurchasedItems[i].IsEquipped
-                        ? $"[E] {player.PurchasedItems[i].Name}"
-                        : $"{player.PurchasedItems[i].Name}";
-                    string mainPower =
-                        player.PurchasedItems[i].AttackPower == 0
-                            ? $"방어력 +{player.PurchasedItems[i].DefensePower}"
-                            : $"공격력 +{player.PurchasedItems[i].AttackPower}";
+                    string equippedStatus = player.PurchasedItems[i].IsEquipped ? $"[E] {player.PurchasedItems[i].Name}" : $"{player.PurchasedItems[i].Name}";
+                    string mainPower = player.PurchasedItems[i].AttackPower == 0 ? $"방어력 +{player.PurchasedItems[i].DefensePower}" : $"공격력 +{player.PurchasedItems[i].AttackPower}";
 
-                    Console.WriteLine(
-                        $"- {equippedStatus} | {mainPower} | {player.PurchasedItems[i].Description}"
-                    );
+                    Console.WriteLine($"- {equippedStatus} | {mainPower} | {player.PurchasedItems[i].Description}");
                 }
                 Console.WriteLine();
                 Console.WriteLine("1. 장착 관리");
@@ -219,7 +218,7 @@
 
                 if (input == "1")
                 {
-                    ShowManagementScene();
+                    ShowEquipManagement();
                 }
                 else if (input == "0")
                 {
@@ -227,35 +226,26 @@
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.Write("잘못된 입력입니다.");
-                    Console.ReadLine();
+                    PrintInputError();
                 }
             }
         }
 
-        static void ShowManagementScene()
+        static void ShowEquipManagement()
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("인벤토리");
+                Console.WriteLine("인벤토리 - 장착 관리");
                 Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
                 for (int i = 0; i < player.PurchasedItems.Count; i++)
                 {
-                    string equippedStatus = player.PurchasedItems[i].IsEquipped
-                        ? $"[E] {player.PurchasedItems[i].Name}"
-                        : $"{player.PurchasedItems[i].Name}";
-                    string mainPower =
-                        player.PurchasedItems[i].AttackPower == 0
-                            ? $"방어력 +{player.PurchasedItems[i].DefensePower}"
-                            : $"공격력 +{player.PurchasedItems[i].AttackPower}";
+                    string equippedStatus = player.PurchasedItems[i].IsEquipped ? $"[E] {player.PurchasedItems[i].Name}" : $"{player.PurchasedItems[i].Name}";
+                    string mainPower = player.PurchasedItems[i].AttackPower == 0 ? $"방어력 +{player.PurchasedItems[i].DefensePower}" : $"공격력 +{player.PurchasedItems[i].AttackPower}";
 
-                    Console.WriteLine(
-                        $"- {i + 1} {equippedStatus} | {mainPower} | {player.PurchasedItems[i].Description}"
-                    );
+                    Console.WriteLine($"- {i + 1} {equippedStatus} | {mainPower} | {player.PurchasedItems[i].Description}");
                 }
                 Console.WriteLine();
                 Console.WriteLine("0. 나가기");
@@ -267,26 +257,29 @@
                 int selectNum;
                 bool isint = int.TryParse(input, out selectNum);
 
-                if (isint && selectNum > 0 && selectNum <= player.PurchasedItems.Count)
+                if (isint)
                 {
-                    player.PurchasedItems[selectNum - 1].IsEquipped = !(
-                        player.PurchasedItems[selectNum - 1].IsEquipped
-                    );
-                }
-                else if (selectNum == 0)
-                {
-                    break;
+                    if (selectNum > 0 && selectNum <= player.PurchasedItems.Count)
+                    {
+                        player.PurchasedItems[selectNum - 1].IsEquipped = !(player.PurchasedItems[selectNum - 1].IsEquipped);
+                    }
+                    else if (selectNum == 0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        PrintInputError();
+                    }
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.Write("잘못된 입력입니다.");
-                    Console.ReadLine();
+                    PrintInputError();
                 }
             }
         }
 
-        static void ShowStoreScene()
+        static void ShowStore()
         {
             while (true)
             {
@@ -301,16 +294,13 @@
                 for (int i = 0; i < items.Length; i++)
                 {
                     string purchaseStatus = items[i].IsPurchased ? "구매 완료" : $"{items[i].Price} G";
-                    string mainPower =
-                        items[i].AttackPower == 0
-                            ? $"방어력 +{items[i].DefensePower}"
-                            : $"공격력 +{items[i].AttackPower}";
-                    Console.WriteLine(
-                        $"- {items[i].Name} | {mainPower} | {items[i].Description} | {purchaseStatus}"
-                    );
+                    string mainPower = items[i].AttackPower == 0 ? $"방어력 +{items[i].DefensePower}" : $"공격력 +{items[i].AttackPower}";
+
+                    Console.WriteLine($"- {items[i].Name} | {mainPower} | {items[i].Description} | {purchaseStatus}");
                 }
                 Console.WriteLine();
                 Console.WriteLine("1. 아이템 구매");
+                Console.WriteLine("2. 아이템 판매");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
@@ -320,7 +310,11 @@
 
                 if (input == "1")
                 {
-                    ShowPurchaseScene();
+                    ShowPurchaseItem();
+                }
+                else if (input == "2")
+                {
+                    ShowSellItem();
                 }
                 else if (input == "0")
                 {
@@ -328,21 +322,19 @@
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.Write("잘못된 입력입니다.");
-                    Console.ReadLine();
+                    PrintInputError();
                 }
             }
         }
 
-        static void ShowPurchaseScene()
+        static void ShowPurchaseItem()
         {
-            bool isBuying = true;
+            bool isPurchasing = true;
 
-            while (isBuying)
+            while (isPurchasing)
             {
                 Console.Clear();
-                Console.WriteLine("상점");
+                Console.WriteLine("상점 - 아이템 구매");
                 Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
                 Console.WriteLine();
                 Console.WriteLine("[보유 골드]");
@@ -352,13 +344,9 @@
                 for (int i = 0; i < items.Length; i++)
                 {
                     string purchaseStatus = items[i].IsPurchased ? "구매 완료" : $"{items[i].Price} G";
-                    string mainPower =
-                        items[i].AttackPower == 0
-                            ? $"방어력 +{items[i].DefensePower}"
-                            : $"공격력 +{items[i].AttackPower}";
-                    Console.WriteLine(
-                        $"- {i + 1} {items[i].Name} | {mainPower} | {items[i].Description} | {purchaseStatus}"
-                    );
+                    string mainPower =items[i].AttackPower == 0 ? $"방어력 +{items[i].DefensePower}" : $"공격력 +{items[i].AttackPower}";
+
+                    Console.WriteLine($"- {i + 1} {items[i].Name} | {mainPower} | {items[i].Description} | {purchaseStatus}");
                 }
                 Console.WriteLine();
                 Console.WriteLine("0. 나가기");
@@ -367,212 +355,127 @@
                 Console.Write(">> ");
 
                 string input = Console.ReadLine();
+                int selectNum;
+                bool isint = int.TryParse(input, out selectNum);
 
-                switch (input)
+                if (isint)
                 {
-                    case "1":
-                        if (items[0].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[0].Price)
-                            {
-                                player.Gold -= items[0].Price;
-                                items[0].IsPurchased = true;
-                                player.PurchasedItems.Add(items[0]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-                    case "2":
-                        if (items[1].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[1].Price)
-                            {
-                                player.Gold -= items[1].Price;
-                                items[1].IsPurchased = true;
-                                player.PurchasedItems.Add(items[1]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-                    case "3":
-                        if (items[2].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[2].Price)
-                            {
-                                player.Gold -= items[2].Price;
-                                items[2].IsPurchased = true;
-                                player.PurchasedItems.Add(items[2]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-                    case "4":
-                        if (items[3].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[3].Price)
-                            {
-                                player.Gold -= items[3].Price;
-                                items[3].IsPurchased = true;
-                                player.PurchasedItems.Add(items[3]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-                    case "5":
-                        if (items[4].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[4].Price)
-                            {
-                                player.Gold -= items[4].Price;
-                                items[4].IsPurchased = true;
-                                player.PurchasedItems.Add(items[4]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-
-                    case "6":
-                        if (items[5].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[5].Price)
-                            {
-                                player.Gold -= items[5].Price;
-                                items[5].IsPurchased = true;
-                                player.PurchasedItems.Add(items[5]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-
-                    case "7":
-                        if (items[6].IsPurchased == false)
-                        {
-                            if (player.Gold >= items[6].Price)
-                            {
-                                player.Gold -= items[6].Price;
-                                items[6].IsPurchased = true;
-                                player.PurchasedItems.Add(items[6]);
-
-                                Console.WriteLine();
-                                Console.Write("구매를 완료했습니다.");
-                                Console.ReadLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.Write("Gold 가 부족합니다.");
-                                Console.ReadLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.Write("이미 구매한 아이템입니다.");
-                            Console.ReadLine();
-                        }
-                        break;
-
-                    case "0":
-                        isBuying = false;
-                        break;
-
-                    default:
-                        Console.WriteLine();
-                        Console.Write("잘못된 입력입니다.");
-                        Console.ReadLine();
-                        break;
+                    if (selectNum > 0 && selectNum <= items.Length)
+                    {
+                        ProcessPurchase(selectNum);
+                    }
+                    else if (selectNum == 0)
+                    {
+                        isPurchasing = false;
+                    }
+                    else
+                    {
+                        PrintInputError();
+                    }
+                }
+                else
+                {
+                    PrintInputError();
                 }
             }
+        }
+
+        static void ProcessPurchase(int selectNum)
+        {
+            int i = selectNum - 1;
+
+            if (items[i].IsPurchased == false)
+            {
+                if (player.Gold >= items[i].Price)
+                {
+                    player.Gold -= items[i].Price;
+                    items[i].IsPurchased = true;
+                    player.PurchasedItems.Add(items[i]);
+
+                    Console.WriteLine();
+                    Console.Write("구매를 완료했습니다.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.Write("Gold 가 부족합니다.");
+                    Console.ReadLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.Write("이미 구매한 아이템입니다.");
+                Console.ReadLine();
+            }
+        }
+
+        static void ShowSellItem()
+        {
+            bool isSelling = true;
+
+            while (isSelling)
+            {
+                Console.Clear();
+                Console.WriteLine("상점 - 아이템 판매");
+                Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+                Console.WriteLine();
+                Console.WriteLine("[보유 골드]");
+                Console.WriteLine($"{player.Gold} G");
+                Console.WriteLine();
+                Console.WriteLine("[아이템 목록]");
+                for (int i = 0; i < player.PurchasedItems.Count; i++)
+                {
+                    string equippedStatus = player.PurchasedItems[i].IsEquipped ? $"[E] {player.PurchasedItems[i].Name}" : $"{player.PurchasedItems[i].Name}";
+                    string mainPower = player.PurchasedItems[i].AttackPower == 0 ? $"방어력 +{player.PurchasedItems[i].DefensePower}" : $"공격력 +{player.PurchasedItems[i].AttackPower}";
+
+                    Console.WriteLine($"- {i + 1} {equippedStatus} | {mainPower} | {player.PurchasedItems[i].Description} | {player.PurchasedItems[i].Price} G");
+                }
+                Console.WriteLine();
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
+
+                string input = Console.ReadLine();
+                int selectNum;
+                bool isint = int.TryParse(input, out selectNum);
+
+                if (isint)
+                {
+                    if (selectNum > 0 && selectNum <= player.PurchasedItems.Count)
+                    {
+                        if (player.PurchasedItems[selectNum - 1].IsEquipped == true)
+                        {
+                            player.PurchasedItems[selectNum - 1].IsEquipped = false;
+                        }
+
+                        player.Gold += (int)(player.PurchasedItems[selectNum - 1].Price * 0.85f);
+                        player.PurchasedItems[selectNum - 1].IsPurchased = false;
+                        player.PurchasedItems.Remove(player.PurchasedItems[selectNum - 1]);
+                    }
+                    else if (selectNum == 0)
+                    {
+                        isSelling = false;
+                    }
+                    else
+                    {
+                        PrintInputError();
+                    }
+                }
+                else
+                {
+                    PrintInputError();
+                }
+            }
+        }
+
+        static void Main()
+        {
+            InitializeItems();
+
+            ShowVillage();
         }
     }
 }
